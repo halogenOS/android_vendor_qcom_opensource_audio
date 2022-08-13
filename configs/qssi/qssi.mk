@@ -45,57 +45,7 @@ ifneq ($(strip $(TARGET_USES_RRO)), true)
 DEVICE_PACKAGE_OVERLAYS += hardware/qcom/audio/configs/common/overlay
 endif
 
-# Low latency audio buffer size in frames
-PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.audio_hal.period_size=192
-
-#disable tunnel encoding
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.tunnel.encode=false
-
-#Buffer size in kbytes for compress offload playback
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.offload.buffer.size.kb=32
-
-#Enable audio track offload by default
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.offload.track.enable=true
-
-#enable voice path for PCM VoIP by default
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.voice.path.for.pcm.voip=true
-
-#Enable multi channel aac through offload
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.offload.multiaac.enable=true
-
-#Disable Multiple offload sesison
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.offload.multiple.enabled=false
-
-#parser input buffer size(256kb) in byte stream mode
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.parser.ip.buffer.size=262144
-
-#flac sw decoder 24 bit decode capability
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.flac.sw.decoder.24bit=true
-
-#split a2dp DSP supported encoder list
-PRODUCT_PROPERTY_OVERRIDES += \
-persist.vendor.bt.a2dp_offload_cap=sbc-aptx-aptxtws-aptxhd-aac-ldac
-
-#enable software decoders for ALAC and APE
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.use.sw.alac.decoder=true
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.use.sw.ape.decoder=true
-
-#enable hw aac encoder by default
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.hw.aac.encoder=true
-
-ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS),true)
+ifneq ($(GENERIC_ODM_IMAGE),true)
 # Reduce client buffer size for fast audio output tracks
 PRODUCT_PRODUCT_PROPERTIES += \
 af.fast_track_multiplier=1
@@ -138,17 +88,6 @@ media.stagefright.audio.deep=false
 
 endif
 #guard for non generic_odm_image
-
-# Enable AAudio MMAP/NOIRQ data path.
-# 2 is AAUDIO_POLICY_AUTO so it will try MMAP then fallback to Legacy path.
-PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
-# Allow EXCLUSIVE then fall back to SHARED.
-PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=2
-PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
-
-#enable mirror-link feature
-PRODUCT_PROPERTY_OVERRIDES += \
-vendor.audio.enable.mirrorlink=false
 
 # for HIDL related packages
 PRODUCT_PACKAGES += \
